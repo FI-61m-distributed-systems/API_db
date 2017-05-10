@@ -1,5 +1,6 @@
 import psycopg2
 import hashlib
+from get_parametra import config
 
 def get_login():
     login= raw_input("login ")
@@ -14,8 +15,8 @@ def get_email():
     return email 
 def reg(login, p, email):
     try:
-    
-        connect = psycopg2.connect(database='Game_Webmoney', user='postgres', host='localhost', password='medvedka123',port = '5433')
+        params = config()
+        connect = psycopg2.connect(**params)    
         cursor = connect.cursor()
 
     except:
@@ -28,18 +29,10 @@ def reg(login, p, email):
         (login, p, email))
         connect.commit()
 
-    except psycopg2.Error:
-        try: 
-        
-            connect.rollback()
-            print "Your data is not correct"
+    except (Exception, psycopg2.Error) as error:
+        print(error)        
+    finally:
+        if connect is not None:
             connect.close()
-
-        except:
-            connect.close()        
-            print ("Your data is not written")
-        
-    connect.close()
-    
    
 reg(get_login(),get_password(),get_email())

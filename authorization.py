@@ -1,5 +1,6 @@
 import psycopg2
 import hashlib
+from get_parametra import config
 def get_login():
     login= raw_input("login ")
     return login
@@ -13,46 +14,31 @@ def get_email():
     return email
 def customer(log,p, email):
     try:
-        
-        connect = psycopg2.connect(database='Game_Webmoney', user='postgres', host='localhost', password='medvedka123',port = '5433')
+        params = config()
+        connect = psycopg2.connect(**params)
         cursor = connect.cursor()
-
     except:
         print("no db")
-
-    try:
-              
+        
+    try:              
         cursor.execute(
         """SELECT id, login, password, email, money
         FROM account
         where login = %s;
         """,(log,) )
         row = cursor.fetchone()
-        if row[1]==log:
-            if row[2]== p:
-                if row[3]== email:
-                    print "Welcome ",log
-                else:
-                    print "Wrong e-mail"
-            else:
-                print "Wrong password"
+        if row[1] != log:
+            print "Wrong login"
+        elif row[2]!= p:
+            print "Wrong password"
+        elif row[3]!= email:
+            print "Wrong email"
         else:
-             print "Wrong login"
-                
-        
+            print "Welcome ",log            
         connect.commit()
-
-    except psycopg2.Error:
-        try: 
-            
-            connect.rollback()
-            print "Your data is not correct"
+    except (Exception, psycopg2.Error) as error:
+        print(error)        
+    finally:
+        if connect is not None:
             connect.close()
-
-        except:
-            connect.close()        
-            print "Your data is not written"
-           
-    connect.close()
-       
 customer(get_login(),get_password(),get_email())
