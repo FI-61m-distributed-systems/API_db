@@ -1,25 +1,15 @@
 import psycopg2
 import hashlib
 from get_parametra import config
-def get_login():
-    login= raw_input("login ")
-    return login
-def get_password():
-    password = raw_input("password ")
-    h = hashlib.md5(password)
-    p = h.hexdigest()
-    return p
-def get_email():
-    email= raw_input("email ")
-    return email
-def customer(log,p, email):
+from stub import get_login,get_password,get_email,WARNING,OK 
+
+def add_customer(log,p, email):
     try:
         params = config()
         connect = psycopg2.connect(**params)
         cursor = connect.cursor()
     except:
-        print("no db")
-        
+        WARNING()        
     try:              
         cursor.execute(
         """SELECT id, login, password, email, money
@@ -28,17 +18,18 @@ def customer(log,p, email):
         """,(log,) )
         row = cursor.fetchone()
         if row[1] != log:
-            print "Wrong login"
+            WARNING()
         elif row[2]!= p:
-            print "Wrong password"
+            WARNING()
         elif row[3]!= email:
-            print "Wrong email"
+            WARNING()
         else:
-            print "Welcome ",log            
+            OK()           
         connect.commit()
-    except (Exception, psycopg2.Error) as error:
-        print(error)        
+    except (Exception, psycopg2.Error):
+        WARNING()       
     finally:
         if connect is not None:
             connect.close()
-customer(get_login(),get_password(),get_email())
+            
+add_customer(get_login(),get_password(),get_email())
