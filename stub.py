@@ -1,3 +1,5 @@
+import hashlib
+
 def get_login():
     login= raw_input("login ")
     return login
@@ -6,11 +8,11 @@ def money():
     money= raw_input("money ")
     return money
 
-def OK():
-    return 1
+def send_ok(data):
+    print "Welcom ", data
 
-def WARNING():
-    return 0
+def send_err(data):
+    print "ERROR ", data
 
 def get_password():
     password = raw_input("password ")
@@ -21,6 +23,3 @@ def get_password():
 def get_email():
     email= raw_input("email ")
     return email 
-
-
-

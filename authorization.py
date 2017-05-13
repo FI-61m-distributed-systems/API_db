@@ -1,15 +1,14 @@
 import psycopg2
 import hashlib
-from get_parametra import config
-from stub import get_login,get_password,get_email,WARNING,OK 
+from connection import connection
+from stub import send_err,send_ok 
 
-def add_customer(log,p, email):
+def authorization_customer(log,p, email):
     try:
-        params = config()
-        connect = psycopg2.connect(**params)
+        connect = connection()
         cursor = connect.cursor()
     except:
-        WARNING()        
+        send_err(1)        
     try:              
         cursor.execute(
         """SELECT id, login, password, email, money
@@ -18,18 +17,13 @@ def add_customer(log,p, email):
         """,(log,) )
         row = cursor.fetchone()
         if row[1] != log:
-            WARNING()
+            send_err("login")
         elif row[2]!= p:
-            WARNING()
+            send_err("password")
         elif row[3]!= email:
-            WARNING()
+            send_err("email")
         else:
-            OK()           
-        connect.commit()
-    except (Exception, psycopg2.Error):
-        WARNING()       
-    finally:
-        if connect is not None:
-            connect.close()
-            
-add_customer(get_login(),get_password(),get_email())
+            send_ok(log)           
+        connect.commit()		
+    except (Exception, psycopg2.Error) as err:
+        send_err(err)
