@@ -1,0 +1,32 @@
+data to add in DB = {
+      "id": "id",
+      "request": "set",
+      "transaction":
+      [
+         {
+            
+            "user": "value",
+            "email": "value"
+			"password": "value"
+            
+         }
+      ]
+   }
+data to update in DB= {
+      "id": "id",
+      "request": "update",
+      "transaction":
+      [
+         {
+            "user": "vika",
+            "field": "money"
+			"value": "val"
+            
+         }
+      ]
+   }
+data to select in DB = {
+      "id": "id",
+      "request": "get",
+      "user": "vika"      
+   }
