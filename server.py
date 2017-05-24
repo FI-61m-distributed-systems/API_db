@@ -1,25 +1,46 @@
 import BaseHTTPServer
 import json
 import urlparse
-import sys
-from call_func import call_func
-  
+import sys, getopt
+from call_func import set_json
+
+def main(argv):
+    host = ''
+    port= ''
+    try:
+        opts, args = getopt.getopt(argv,"hs:p:",["host=","port="])
+    except getopt.GetoptError:
+        print 'python server.py -s <host> -p <port>'
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            print 'python server.py -s <host> -p <port>'
+            sys.exit()
+        elif opt in ("-s", "--host"):
+            host = arg      
+        elif opt in ("-p", "--port"):
+            port = arg
+    try:
+        BaseHTTPServer.HTTPServer((host,int(port)), MyServer).serve_forever()
+    except:
+        print 'python server.py -s <host> -p <port>'
+        sys.exit(2)
 class MyServer(BaseHTTPServer.BaseHTTPRequestHandler):
 
-    def do_POST(s):
+    def do_POST(self):
         """Respond to a POST request."""
-        length = int(s.headers['Content-Length'])
-        post_data = urlparse.parse_qs(s.rfile.read(length).decode('utf-8'))
+        length = int(self.headers['Content-Length'])
+        post_data = urlparse.parse_qs(self.rfile.read(length).decode('utf-8'))
         data = json.dumps(json.loads(post_data['json'][0]))
         print "Server call to DB..."
-        s.send_response(200)
-        s.send_header('Content-type','application/json')        
+        self.send_response(200)
+        self.send_header('Content-type','application/json')        
         try:
-            s.send_header('Content',call_func(data))
+            self.send_header('Content',set_json(data))
         except:
-            s.send_header('Content',404)
-        s.end_headers()
+            self.send_header('Content',500)
+        self.end_headers()
         return
 
 if __name__ == '__main__':
-    BaseHTTPServer.HTTPServer(('localhost',8000), MyServer).serve_forever()
+    main(sys.argv[1:])
