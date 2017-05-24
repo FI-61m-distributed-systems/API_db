@@ -10,9 +10,10 @@ def set_data(login, password, email):
         return send_err(1)
     try:    
         cursor.execute(
-        """INSERT INTO account  ( id,login, password, email, money) VALUES(default, %s , %s, %s,default );""",
+        """INSERT INTO account  (id,login, password, email, money,game_config)
+        VALUES(default, %s , %s, %s,default,default);""",
         (login, password, email))
         connect.commit()
         return send_ok(1)
     except (Exception, psycopg2.Error) as err:
-        return send_err(err) 
+        return send_err(err)

@@ -9,12 +9,10 @@ data = {
       "request": "update",
       "transaction":
       [
-         {
-            "action": "update",
+         {           
             "user": "vika",
             "field": "password",
-	    "value": "vv"
-            
+	    "value": "xfjkv"            
          }
       ]
    }
@@ -22,6 +20,5 @@ data = {
 p=urllib.urlencode({'json': json.dumps(data)})
 response = urllib2.urlopen(url,p)
 print response.getcode()
-s=response.headers['Content']
-print s
+print response.headers['Content']
 response.close()

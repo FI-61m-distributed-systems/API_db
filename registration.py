@@ -10,7 +10,7 @@ def reg(login, password, email):
         send_err(1)
     try:    
         cursor.execute(
-        """INSERT INTO account  ( id,login, password, email, money) VALUES(default, %s , %s, %s,default );""",
+        """INSERT INTO account  ( id,login, password, email, money,game_config) VALUES(default, %s , %s, %s,default,default);""",
         (login, password, email))
         connect.commit()		
     except (Exception, psycopg2.Error) as err:

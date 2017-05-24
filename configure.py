@@ -28,8 +28,7 @@ def main(argv):
    f.close()
    print "Create ini"
 
-def changeDB_ini():
-   print "change ini"
+def changeDB_ini():   
    try:
       fi = open('conf.ini', 'r') 
       text = fi.read()
@@ -37,11 +36,11 @@ def changeDB_ini():
       f = open('conf.ini', 'w')
       f.write(text.replace('database=postgres', 'database=Game_Webmoney'))
       f.close()
+      print "change ini"
    except:
       print "ERROR ini didn't change"
       
-def create_db():
-        print "create db"
+def create_db():        
         conn = None
         try:
                 connect = connection()
@@ -77,8 +76,10 @@ def create_table():
                   "password" character varying(50) NOT NULL,
                   email character varying(50) NOT NULL,
                   money integer DEFAULT 0,
+                  game_config text ,
                   CONSTRAINT account_pkey PRIMARY KEY (id),
-                  CONSTRAINT account_login_key UNIQUE (login)
+                  CONSTRAINT account_login_key UNIQUE (login),
+                  CONSTRAINT CHK_money CHECK (money>=0)
                 )
                 WITH (
                   OIDS=FALSE

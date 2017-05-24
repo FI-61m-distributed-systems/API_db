@@ -1,5 +1,3 @@
-import hashlib
-
 def get_login(data):
     login= raw_input("login ")
     return login
@@ -16,9 +14,7 @@ def send_err(data):
 
 def get_password(data):
     password = raw_input("password ")
-    h = hashlib.md5(password)
-    p = h.hexdigest()
-    return p
+    return password
 
 def get_email(data):
     email= raw_input("email ")
