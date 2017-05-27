@@ -10,7 +10,7 @@ def set_data(login, password, email):
         return send_err(1)
     try:    
         cursor.execute(
-        """INSERT INTO account  (id,login, password, email, money,game_config)
+        """INSERT INTO account  (id,login, password, email,money,game_config)
         VALUES(default, %s , %s, %s,default,default);""",
         (login, password, email))
         connect.commit()

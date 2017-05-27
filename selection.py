@@ -1,10 +1,9 @@
 import psycopg2
-import hashlib
 from connection import connection
-from stub import send_err,send_ok
+from stub import send_err,send_ok,do_condition,set_fields
 import json
 
-def select(id_t,log):
+def select(fields,conditions):
     try:
         connect = connection()
         cursor = connect.cursor()
@@ -12,25 +11,20 @@ def select(id_t,log):
         send_err(1)        
     try:              
         cursor.execute(
-        """SELECT login, password, email, money, game_config
-        FROM account
-        where login = %s;
-        """,(log,))
-        row = cursor.fetchone()
-        data = {
-            "id": id_t,            
-            "fields": 
-                [
-                    {
-                     "password": row[1],
-                     "email": row[2],
-                     "money": row[3],
-					 "game_config":row[4]
-                    }
-                ]
-            }              
+        """SELECT """+set_fields(fields) +
+        """ FROM account
+        where """ +do_condition(conditions)+""";
+        """)
+        rows = cursor.fetchall()       
+        value=[]
+        for row in range(0,len(rows),1):
+            dictt={}
+            for i in range(0,len(rows[row]),1):                
+                dictt[fields[i]]=rows[row][i]
+            value.append(dictt)        
+        data = {"values":value}
         connect.commit()
         t= json.dumps(data)
         return t
     except (Exception, psycopg2.Error) as err:
-        send_err(err)
+        return send_err(err)

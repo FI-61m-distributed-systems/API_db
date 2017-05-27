@@ -18,4 +18,29 @@ def get_password(data):
 
 def get_email(data):
     email= raw_input("email ")
-    return email 
+    return email
+def do_condition(conditions):
+    dictionary={"user": "login", "password": "password", "email": "email",
+                "money":"money","game":"game_config"}
+    i=0
+    j=0
+    srt=''
+    for i in range(0,len(conditions),1):
+        if conditions[i][0]== "money":
+            srt = dictionary[conditions[i][0]]+" "+conditions[i][1]+" "+conditions[i][2]+" "
+        else:
+            srt = dictionary[conditions[i][0]]+" "+conditions[i][1]+" '"+conditions[i][2]+"' "
+        if i<len(conditions)-1:
+            srt=srt+ "AND "    
+    return srt
+def set_fields(fields):
+    dictionary={"user": "login", "password": "password", "email": "email",
+                    "money":"money","game":"game_config"}
+    i=0
+    srt=''
+    for i in range(0,len(fields),1):        
+        if i<len(fields)-1:
+            srt = srt+dictionary[fields[i]]+","
+        else:
+            srt = srt+dictionary[fields[i]]
+    return srt
