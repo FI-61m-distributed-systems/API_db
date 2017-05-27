@@ -2,7 +2,9 @@ import psycopg2
 from connection import connection
 from stub import send_err, send_ok
 
-def update_data(login,field,value):	
+def update_data(login,field,value):
+    dictionary={"login": "login", "password": "password", "email": "email",
+                "money":"money","game":"game_config"}
     try:
         connect = connection()	           
         cursor = connect.cursor()
@@ -17,7 +19,7 @@ def update_data(login,field,value):
         cursor.execute(
         """
         UPDATE account
-        SET """+ field+"""=%s
+        SET """+ dictionary[field]+"""=%s
         WHERE login=%s;            
         """,
         (value,login))
