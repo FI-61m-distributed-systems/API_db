@@ -12,11 +12,11 @@ def main(argv):
    try:
       opts, args = getopt.getopt(argv,"hs:p:l:",["host=","password=","port="])
    except getopt.GetoptError:
-      print 'test.py -s <host> -p <password> -l <port>'
+      print 'python configure.py -s <host> -p <password> -l <port>'
       sys.exit(2)
    for opt, arg in opts:
       if opt == '-h':
-         print 'tests.py -s <host> -p <password> -l <port>'
+         print 'python configure.py -s <host> -p <password> -l <port>'
          sys.exit()
       elif opt in ("-s", "--host"):
          host = arg
